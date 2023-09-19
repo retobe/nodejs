@@ -7,20 +7,23 @@ const addressSchema = new mongoose.Schema({
 })
 
 const userSchema = new mongoose.Schema({
-    name: {type: String, minLength: 1},
+    name: { type: String },
     age: {
         type: Number,
         min: 1,
         max: 100,
         validate: {
-            validator: v => v % 2 ==- 0,
-            message: props => `${props.value} is not an even number`,
+            validator: v => v % 2 == 1,
+            message: props => `${props.value} is not an odd number`,
         }
     },
     email: {
         type: String,
         required: true,
         lowercase: true
+    },
+    password: {
+        type: String
     },
     createdAt: {
         type: Date,
@@ -31,9 +34,16 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: () => Date.now()
     },
-    bestFriend: mongoose.SchemaTypes.ObjectId,
+    bestFriend: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "User"
+    },
     hobbies: [String],
     address: addressSchema
 });
+
+userSchema.methods.sayHi = function() {
+    console.log(`Hi my name is ${this.name}`)
+}
 
 module.exports = mongoose.model("User", userSchema);

@@ -1,72 +1,50 @@
-const express = require("express")
+const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const express = require("express");
+const cors = require('cors'); // Import the cors middleware
 const app = express();
 require("dotenv").config();
-const User = require("./User")
+const User = require("./User"); // Make sure this path is correct
 const uri = process.env.TOKEN;
 
-mongoose.set("strictQuery", false);
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+mongoose.connect(uri);
 
-const PORT = 3000;
-const customers = [
-    {
-        "name": "Wael",
-        "industry": "Software Developer"
-    }
-];
+// Use body-parser middleware to parse incoming request bodies
+app.use(cors());
+app.use(bodyParser.json()); // Parse JSON data
+app.use(express.static('http://127.0.0.1:3000/Index.htm')); // Replace 'public' with your directory name
+app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded form data
 
-app.get('/', (req, res) => {
-    res.send("Welcome!");
-})
-
-app.get('/api/customers', (req, res) => {
-    res.send({ "customers": customers });
-})
-
-app.post('/api/customers', (req, res) => {
-    console.log(req.body);
-    res.send(req.body);
-})
-
-app.post('/', (req, res) => {
-    res.send("This is a post request");
-})
-
-
-const start = async () => {
+app.post('/register', async (req, res) => {
     try {
-        await mongoose.connect(uri)
+        const { username, email, password } = req.body;
+        const emailExist = await User.exists({ email: email });
+        let msg = "User succesfully created.";
 
-        app.listen(PORT, () => {
-            console.log('App listening on port', PORT);
-        })
+        if (emailExist) {
+            msg = 'This email already exists!';
+        } else {
+
+            const user = await User.create({
+                name: username,
+                email: email,
+                password: password
+            });
+
+            await user.save();
+        }
+
+        console.log(emailExist);
+
+        res.status(201).json({ message: msg });
     } catch (error) {
         console.error(error);
+        res.status(500).json({ message: 'Registration failed' });
     }
-}
+});
 
-start();
+// Your other routes and middleware can be defined here...
 
-run();
-async function run() {
-    try {
-        const user = await User.create({
-            name: "Kyle",
-            email: "KYLE123@gmail.com",
-            age: 18,
-            hobbies: ["Weight lifting", "Coding", "Playing soccer"],
-            address: {
-                street: "4147 Madison St",
-                zipcode: 48125,
-                city: "Dearborn Hts",
-            },
-        });
-        user.createdAt = 5;
-        await user.save();
-        console.log(user)
-    } catch(e) {
-        console.log(e.message)
-    }
-}
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+});
