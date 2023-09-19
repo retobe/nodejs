@@ -2,7 +2,7 @@ const express = require("express")
 const mongoose = require("mongoose");
 const app = express();
 require("dotenv").config();
-
+const User = require("./User")
 const uri = process.env.TOKEN;
 
 mongoose.set("strictQuery", false);
@@ -42,9 +42,31 @@ const start = async () => {
         app.listen(PORT, () => {
             console.log('App listening on port', PORT);
         })
-    } catch(error) {
+    } catch (error) {
         console.error(error);
     }
 }
 
 start();
+
+run();
+async function run() {
+    try {
+        const user = await User.create({
+            name: "Kyle",
+            email: "KYLE123@gmail.com",
+            age: 18,
+            hobbies: ["Weight lifting", "Coding", "Playing soccer"],
+            address: {
+                street: "4147 Madison St",
+                zipcode: 48125,
+                city: "Dearborn Hts",
+            },
+        });
+        user.createdAt = 5;
+        await user.save();
+        console.log(user)
+    } catch(e) {
+        console.log(e.message)
+    }
+}
