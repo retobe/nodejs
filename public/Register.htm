@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Registration</title>
+    <script src="../server/server.js" defer></script>
+    <script src="./client.js" defer></script>
+    <script src="../server/checkExists.js" defer></script>
+  </head>
+  <body>
+    <h1>User Registration</h1>
+    <form id="registrationForm" action="/register" method="POST">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required />
+      <br />
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required />
+      <br />
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required />
+      <br />
+
+      <input type="submit" value="Register" />
+    </form>
+  </body>
+</html>
