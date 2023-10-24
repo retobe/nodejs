@@ -1,49 +1,44 @@
 const mongoose = require("mongoose");
 
-const addressSchema = new mongoose.Schema({
-    street: String,
-    city: String,
-    zipcode: Number
-})
-
+// Define the User schema
 const userSchema = new mongoose.Schema({
-    name: { type: String },
-    age: {
-        type: Number,
-        min: 1,
-        max: 100,
-        validate: {
-            validator: v => v % 2 == 1,
-            message: props => `${props.value} is not an odd number`,
-        }
+    name: {
+        type: String,
+    },
+    password: {
+        type: String,
+        required: true
     },
     email: {
         type: String,
+        unique: true,
         required: true,
-        lowercase: true
     },
-    password: {
-        type: String
+    // Add other user-related fields as needed (e.g., name, profile picture, etc.)
+});
+
+// Define the Session schema
+const sessionSchema = new mongoose.Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
+    token: {
+        type: String,
+        required: true,
     },
     createdAt: {
         type: Date,
-        immutable: true,
-        default: () => Date.now()
+        default: Date.now,
+        expires: '7d',
     },
-    updatedAt: {
-        type: Date,
-        default: () => Date.now()
-    },
-    bestFriend: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: "User"
-    },
-    hobbies: [String],
-    address: addressSchema
 });
 
-userSchema.methods.sayHi = function() {
-    console.log(`Hi my name is ${this.name}`)
-}
+const User = mongoose.model('User', userSchema);
+const Session = mongoose.model('Session', sessionSchema);
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = {
+    User,
+    Session,
+};

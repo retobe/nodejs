@@ -2,26 +2,36 @@
 <html>
   <head>
     <title>User Registration</title>
-    <script src="../server/server.js" defer></script>
-    <script src="./client.js" defer></script>
-    <script src="../server/checkExists.js" defer></script>
+    <script src="./assets/js/client.js" defer></script>
   </head>
   <body>
-    <h1>User Registration</h1>
-    <form id="registrationForm" action="/register" method="POST">
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" required />
-      <br />
+    <div class="container">
+      <h1>User Registration</h1>
+      <form
+        id="registrationForm"
+        onsubmit="handleRegisterSubmit(event)"
+        method="POST"
+      >
+        <label for="username">Username:</label>
+        <input type="text" id="username2" name="username" required />
+        <br />
 
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required />
-      <br />
+        <label for="email">Email:</label>
+        <input type="email" id="email2" name="email" required />
+        <br />
 
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required />
-      <br />
+        <label for="password">Password:</label>
+        <input type="password" id="password2" name="password" required />
+        <br />
 
-      <input type="submit" value="Register" />
-    </form>
+        <input type="submit" value="Register" />
+      </form>
+    </div>
+    <div
+      class="alert alert-danger"
+      role="alert"
+      id="loginAlert"
+      style="display: none"
+    ></div>
   </body>
 </html>
