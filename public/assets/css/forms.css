@@ -48,7 +48,7 @@ i {
   height: 90%;
   max-height: 35rem;
   width: 40%;
-  max-width: 15rem;
+  max-width: 20rem;
   color: rgba(0, 0, 0, 0.7);
   text-shadow: 0 0 5px;
   justify-content: center;
@@ -65,6 +65,11 @@ form {
   font-size: 18px;
   text-align: center;
   font-family: "Poppins" !important;
+}
+
+#registrationForm {
+  gap: 0;
+  height: 25rem;
 }
 
 label {

@@ -2,6 +2,11 @@
 <html>
   <head>
     <title>User Registration</title>
+    <link rel="stylesheet" href="./assets/css/forms.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
     <script src="./assets/js/client.js" defer></script>
   </head>
   <body>
@@ -12,15 +17,21 @@
         onsubmit="handleRegisterSubmit(event)"
         method="POST"
       >
-        <label for="username">Username:</label>
+        <label for="username"
+          ><i class="fa fa-user" aria-hidden="true"></i> Username:</label
+        >
         <input type="text" id="username2" name="username" required />
         <br />
 
-        <label for="email">Email:</label>
+        <label for="email"
+          ><i class="fa fa-envelope" aria-hidden="true"></i> Email:</label
+        >
         <input type="email" id="email2" name="email" required />
         <br />
 
-        <label for="password">Password:</label>
+        <label for="password"
+          ><i class="fa fa-key" aria-hidden="true"></i> Password:</label
+        >
         <input type="password" id="password2" name="password" required />
         <br />
 
@@ -30,7 +41,7 @@
     <div
       class="alert alert-danger"
       role="alert"
-      id="loginAlert"
+      id="registerAlert"
       style="display: none"
     ></div>
   </body>

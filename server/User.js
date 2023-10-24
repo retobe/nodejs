@@ -14,8 +14,15 @@ const userSchema = new mongoose.Schema({
         unique: true,
         required: true,
     },
+    sessionToken: {
+        type: String,
+    },
+    sessionExpiration: {
+        type: Date,
+    },
     // Add other user-related fields as needed (e.g., name, profile picture, etc.)
 });
+
 
 // Define the Session schema
 const sessionSchema = new mongoose.Schema({
@@ -35,7 +42,7 @@ const sessionSchema = new mongoose.Schema({
     },
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('LogUsers', userSchema);
 const Session = mongoose.model('Session', sessionSchema);
 
 module.exports = {
