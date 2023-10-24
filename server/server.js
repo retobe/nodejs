@@ -16,14 +16,19 @@ const uri = process.env.TOKEN; // Change to your MongoDB URI
 
 // Use body-parser middleware to parse incoming request bodies
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:8080', "http://localhost:3000", "http://192.168.1.248:8080"],
     credentials: true,
 };
 
+app.use(function (err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
 app.use(cors(corsOptions));
 app.use(bodyParser.json()); // Parse JSON data
 app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded form data
 app.use(cookieParser());
+
 
 
 
@@ -185,6 +190,30 @@ app.post('/check-session', async (req, res) => {
         res.status(500).json({ error: 'An error occurred while checking the session.' });
     }
 });
+
+
+app.post("/user", async (req, res) => {
+    const { sessionToken } = req.body;
+    const userProfile = await Schema.User.findOne({ sessionToken: sessionToken });
+    if (!userProfile) {
+        return res.json({ error: `Session token has been altered please delete your cookies from this domain or relogin.` })
+    } else {
+        return res.json({ message: `Success`, profile: userProfile, amount: userProfile.balance })
+    }
+})
+
+
+app.post("/cookie-add", async (req, res) => {
+    const { sessionToken } = req.body;
+    const userProfile = await Schema.User.findOne({ sessionToken: sessionToken });
+    if (!userProfile) {
+        return res.json({ error: `Session token has been altered please delete your cookies from this domain or relogin.` })
+    } else {
+        userProfile.balance += 1;
+        userProfile.save();
+        return res.json({ message: `Success`, amount: userProfile.balance })
+    }
+})
 
 
 // Start the server

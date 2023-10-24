@@ -1,0 +1,21 @@
+body {
+  background: linear-gradient(rgb(64, 95, 175), rgb(63, 63, 227)) fixed;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+  text-align: center;
+  background-color: red;
+  width: 20rem;
+  padding: 10px;
+  margin: auto;
+  border-radius: 10px;
+  color: #fff;
+}
+
+button {
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  padding: 5px;
+}

@@ -76,6 +76,18 @@ label {
   margin-top: 1.5rem;
 }
 
+a {
+  font-size: 15px;
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+}
+
+a:focus,
+a:hover {
+  transform: scale(1.2);
+}
+
 input {
   color: rgba(0, 0, 0, 0.5);
   width: 150px;

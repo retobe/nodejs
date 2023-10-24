@@ -47,8 +47,6 @@ async function checkSessionOnLoad() {
             });
 
             const data = await response.json();
-            console.log(data.session)
-
             if (data.session === true) {
                 window.location.replace("Home.htm");
             } else {
@@ -72,8 +70,6 @@ async function handleRegisterSubmit(e) {
         password: formData.get("password")
     };
 
-    console.log(requestData)
-
     try {
         const response = await fetch(`http://localhost:3001/register`, {
             method: "POST",
@@ -91,12 +87,6 @@ async function handleRegisterSubmit(e) {
             alertDiv.classList.remove("danger")
             alertDiv.classList.add("success")
             form.style.display = "none";
-            console.log(document.cookie)
-            if (document.cookie.includes('sessionToken')) {
-                console.log('SessionToken cookie is set.');
-            } else {
-                console.log("Nope didnt work")
-            }
             setTimeout(() => {
                 alertDiv.innerText = "Redirecting..."
                 setTimeout(() => {
