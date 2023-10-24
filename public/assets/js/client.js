@@ -99,9 +99,9 @@ async function handleRegisterSubmit(e) {
             }
             setTimeout(() => {
                 alertDiv.innerText = "Redirecting..."
-                // setTimeout(() => {
-                //     window.location.replace("Home.htm")
-                // }, 1000);
+                setTimeout(() => {
+                    window.location.replace("Home.htm")
+                }, 1000);
             }, 2000);
         } else if (data.error) {
             alertDiv.classList.remove("success")
@@ -142,9 +142,9 @@ async function handleLoginSubmit(e) {
             form.style.display = "none";
             setTimeout(() => {
                 alertDiv.innerText = "Redirecting..."
-                // setTimeout(() => {
-                //     window.location.replace("Home.htm")
-                // }, 1000);
+                setTimeout(() => {
+                    window.location.replace("Home.htm")
+                }, 1000);
             }, 2000);
         } else if (data.error) {
             alertDiv.classList.remove("success")

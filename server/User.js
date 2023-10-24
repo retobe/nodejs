@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema({
     sessionExpiration: {
         type: Date,
     },
+    balance: {
+        type: Number,
+        default: 0,
+    }
     // Add other user-related fields as needed (e.g., name, profile picture, etc.)
 });
 

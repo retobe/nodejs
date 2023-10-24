@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded form da
 app.use(cookieParser());
 
 
-// MongoDB connection setup
+
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log(chalk.blueBright('Connected to MongoDB'));
@@ -88,7 +88,10 @@ app.post('/register', async (req, res) => {
         user.sessionExpiration = expirationTimestamp;
         await user.save();
 
-        res.cookie('sessionToken', sessionToken, { expires: expirationTimestamp, httpOnly: false }).status(201).json({ message: 'User registered successfully' });
+        res.cookie('sessionToken', sessionToken, {
+            expires: expirationTimestamp,
+            httpOnly: false,
+        }).status(201).json({ message: 'User registered successfully' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Registration failed' });
