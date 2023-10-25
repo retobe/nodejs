@@ -16,7 +16,7 @@ const uri = process.env.TOKEN;
 
 // Use body-parser middleware to parse incoming request bodies
 const corsOptions = {
-    origin: ['http://localhost:8080', "http://localhost:3000", "http://192.168.1.248:8080"],
+    origin: ['http://localhost:8080', "http://localhost:5500", "http://127.0.0.1:5500", "http://192.168.1.248:8080"],
     credentials: true,
 };
 
@@ -43,31 +43,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 // REGISTER FORM
 app.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
-
-    const sessionToken = req.cookies['sessionToken'];
-
-    if (sessionToken) {
-        try {
-            const user = await Schema.User.findOne({ sessionToken });
-            if (user && user.sessionExpiration > new Date()) {
-
-                const newExpiration = new Date();
-                newExpiration.setDate(newExpiration.getDate() + 7);
-
-
-                user.sessionExpiration = newExpiration;
-                await user.save();
-
-
-                return res.status(200).json({ message: 'Session is valid. User is logged in.', session: true });
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
     try {
-        console.log("Reached here")
         const existingUser = await Schema.User.exists({ email: email });
 
         if (!!existingUser === true) {
@@ -100,32 +76,6 @@ app.post('/register', async (req, res) => {
 //LOGIN FORM
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-
-    // Check if the user has a session token cookie
-    const sessionToken = req.cookies['sessionToken'];
-
-    if (sessionToken) {
-        // Check the validity of the session token
-        try {
-            const user = await Schema.User.findOne({ sessionToken });
-            if (user && user.sessionExpiration > new Date()) {
-                // Session is valid; update the session expiration (e.g., refresh it to 7 days from now)
-                const newExpiration = new Date();
-                newExpiration.setDate(newExpiration.getDate() + 7);
-
-                // Update the session expiration in the database
-                user.sessionExpiration = newExpiration;
-                await user.save();
-
-                // You can consider the user as logged in, so respond with success
-                return res.status(200).json({ message: 'Session is valid. User is logged in.' });
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    // If the session token is not valid or doesn't exist, proceed with regular login
     try {
         const user = await Schema.User.findOne({ email: email });
 
@@ -146,10 +96,10 @@ app.post('/login', async (req, res) => {
                 await user.save();
 
                 // Set a new cookie with the session token
-                res.cookie('sessionToken', sessionToken, {
+                return res.cookie('sessionToken', sessionToken, {
                     expires: expirationTimestamp,
                     httpOnly: false
-                }).json({ message: 'Successfully Logged in', sessionToken }).end();
+                }).json({ message: 'Successfully Logged in', sessionToken });
             }
         } else if (!user) {
             return res.status(401).json({ error: 'User doesn\'t exist.' });
@@ -199,9 +149,59 @@ app.post("/cookie-add", async (req, res) => {
     if (!userProfile) {
         return res.json({ error: `Session token has been altered please delete your cookies from this domain or relogin.` })
     } else {
-        userProfile.balance += 1;
+        userProfile.balance += userProfile.multiplier;
         userProfile.save();
-        return res.json({ message: `Success`, amount: userProfile.balance })
+        return res.json({ message: `Success`, amount: userProfile.balance, profile: userProfile })
+    }
+})
+
+app.post("/multiplier", async (req, res) => {
+    const { sessionToken, multiplier } = req.body
+    const userProfile = await Schema.User.findOne({ sessionToken: sessionToken });
+    if (!userProfile) {
+        return res.json({ error: `Session token has been altered please delete your cookies from this domain or relogin.` })
+    } else {
+        userProfile.multiplier = parseInt(multiplier);
+        userProfile.save();
+        res.json({ profile: userProfile, message: `Multiplier has now been set to ${parseInt(multiplier)}x` })
+    }
+})
+
+app.post("/delete-account", async (req, res) => {
+    const { sessionToken } = req.body
+    const database = mongoose.connection;
+    const user = database.collection("logusers");
+
+    try {
+        const deletedUser = await Schema.User.findOneAndDelete({ sessionToken: sessionToken });
+
+        if (deletedUser) {
+            return res.status(201).json({ message: "User deleted successfully", success: true });
+        } else {
+            return res.status(404).json({ error: "User not found", success: false });
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: `There has been an Internal Server Error. Please try again later.`, success: false });
+    }
+})
+
+app.post("/delete-data", async (req, res) => {
+    const { sessionToken } = req.body
+    try {
+        const userProfile = await Schema.User.findOne({ sessionToken: sessionToken })
+
+        if (!userProfile) {
+            return res.status(404).json({ error: "User not found", success: false });
+        } else {
+            userProfile.balance = 0;
+            userProfile.multiplier = 1;
+            userProfile.save();
+            return res.status(201).json({ success: true });
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: `There has been an Internal Server Error. Please try again later.`, success: false });
     }
 })
 

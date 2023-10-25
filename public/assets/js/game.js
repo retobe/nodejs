@@ -43,8 +43,6 @@ function getCookie(name) {
 async function updatePageTing() {
     const sessionToken = getCookie('sessionToken');
 
-    console.log(sessionToken)
-
     if (sessionToken) {
         try {
             const response = await fetch(`http://localhost:3001/user`, {
@@ -55,11 +53,19 @@ async function updatePageTing() {
                 body: JSON.stringify({ sessionToken }),
             });
             const data = await response.json();
-            console.log(data.profile)
-            await updateBalance(data.profile.balance)
+            const multiplier = data.profile.multiplier;
+
+            const items = document.querySelectorAll('.item');
+
+            items.forEach(item => {
+                const h1 = item.querySelector('h1');
+                if (h1.textContent === multiplier + 'x') {
+                    item.classList.add('selected');
+                }
+            });
+            await updateValues(data.profile.balance, data.profile.multiplier)
         } catch (error) {
             console.error(error);
-            alert("An error occurred while processing your request.");
         }
     } else {
         return window.location.replace("Register.htm");
@@ -68,14 +74,16 @@ async function updatePageTing() {
 
 setTimeout(updatePageTing, 1000);
 
-async function updateBalance(amount = 0) {
-    if (isNaN(amount)) return console.log("Invalid Amount")
+async function updateValues(amount, multiplier) {
+    if (isNaN(amount)) return console.log("Invalid Amount");
+    if (isNaN(multiplier)) return console.log("Invalid Multiplier");
     const balanceElement = document.querySelector("#balanceAmount");
-    balanceElement.textContent = `Balance: ${amount}`;
+    balanceElement.textContent = `Balance: ${amount.toLocaleString() || 0}`;
+    const multiplierElement = document.querySelector("#multiplierAmount");
+    multiplierElement.textContent = `Multiplier: ${multiplier.toLocaleString() + "x" || "1x"}`;
 }
 
-
-async function addCount(e) {
+async function addCount() {
     const sessionToken = getCookie('sessionToken');
 
     console.log(sessionToken)
@@ -90,7 +98,7 @@ async function addCount(e) {
         });
 
         const data = await response.json();
-        updateBalance(data.amount);
+        updateValues(data.amount, data.profile.multiplier);
 
     } catch (error) {
         console.error(error);

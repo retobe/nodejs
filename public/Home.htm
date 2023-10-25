@@ -3,16 +3,47 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="./assets/css/game.css" />
-    <script src="./assets/js/game.js"></script>
+    <script src="./assets/js/Game.js" defer></script>
+    <script src="./assets/js/Account.js" defer></script>
+    <script src="./assets/js/Items.js" defer></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home Page</title>
   </head>
   <body>
     <div class="container">
       <h1>Welcome to the home page!</h1>
-      <h4 id="balanceAmount">Balance:</h4>
-      <button onclick="addCount(event)">Click Me</button>
-      <button onclick="signOut(event)" class="signout">Sign Out</button>
+      <h4 id="balanceAmount">Loading...</h4>
+      <h4 id="multiplierAmount">Loading...</h4>
+      <button class="press" onclick="addCount()">Click Me</button>
+      <button class="press" onclick="signOut()">Sign Out</button>
+    </div>
+
+    <div class="shop">
+      <h1 class="header">Multipliers</h1>
+      <div class="item" id="item1">
+        <h1 class="title">2x</h1>
+      </div>
+      <div class="item" id="item2">
+        <h1 class="title">5x</h1>
+      </div>
+      <div class="item" id="item3">
+        <h1 class="title">10x</h1>
+      </div>
+      <div class="item" id="item4">
+        <h1 class="title">15x</h1>
+      </div>
+      <div class="item" id="item5">
+        <h1 class="title">20x</h1>
+      </div>
+    </div>
+
+    <div class="footer">
+      <button onclick="deleteData(event)" class="press danger">
+        Delete Data
+      </button>
+      <button onclick="deleteAccount(event)" class="press danger">
+        Delete Account
+      </button>
     </div>
   </body>
 </html>

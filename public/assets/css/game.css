@@ -1,21 +1,130 @@
 body {
-  background: linear-gradient(rgb(64, 95, 175), rgb(63, 63, 227)) fixed;
-  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(rgb(35, 52, 202), rgb(63, 137, 227)) fixed;
+  font-family: "JetBrains Mono", monospace;
+  height: 100dvh;
 }
 
 .container {
   text-align: center;
-  background-color: red;
+  background: linear-gradient(rgb(29, 137, 220), rgb(9, 81, 234));
   width: 20rem;
   padding: 10px;
   margin: auto;
   border-radius: 10px;
   color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
-button {
-  border-radius: 10px;
-  border: none;
-  outline: none;
-  padding: 5px;
+.press {
+  align-items: center;
+  background-color: #fcfcfd;
+  border-radius: 4px;
+  border-width: 0;
+  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
+    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
+  box-sizing: border-box;
+  color: #36395a;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: "JetBrains Mono", monospace;
+  height: 48px;
+  justify-content: center;
+  line-height: 1;
+  list-style: none;
+  overflow: hidden;
+  padding-left: 16px;
+  padding-right: 16px;
+  position: relative;
+  text-align: left;
+  text-decoration: none;
+  transition: box-shadow 0.15s, transform 0.15s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  will-change: box-shadow, transform;
+  font-size: 18px;
+}
+
+.press:focus {
+  box-shadow: #d6d6e7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
+    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
+}
+
+.press:hover {
+  box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px,
+    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
+  transform: translateY(-2px);
+}
+
+.press:active {
+  box-shadow: #d6d6e7 0 3px 7px inset;
+  transform: translateY(2px);
+}
+
+.shop {
+  margin: auto;
+  text-align: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 90%;
+  max-width: 30rem;
+  background-color: transparent;
+  grid-gap: 10px;
+  font-family: "JetBrains Mono", monospace;
+  margin-top: 5rem;
+}
+
+.item {
+  background-color: rgba(59, 95, 214, 0.655);
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  transition: 0.5s;
+  cursor: pointer;
+  margin: 0;
+}
+
+.item:focus {
+  box-shadow: #d6d6e7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
+    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #1818aa 0 -3px 0 inset;
+}
+
+.item:hover {
+  box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px,
+    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
+  transform: translateY(-2px);
+}
+
+.item:active {
+  box-shadow: #d6d6e7 0 3px 7px inset;
+  transform: translateY(2px);
+}
+
+.header {
+  color: #fff;
+  grid-column: -1/1;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+.selected {
+  background: rgba(59, 0, 214, 1);
+}
+
+.footer {
+  display: flex;
+  justify-content: right;
+  gap: 10px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: white;
+}
+
+.danger {
+  background: rgb(255, 0, 0);
+  color: #fff;
+  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
+    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #a92929 0 -3px 0 inset;
 }
