@@ -24,11 +24,8 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     }
-    // Add other user-related fields as needed (e.g., name, profile picture, etc.)
 });
 
-
-// Define the Session schema
 const sessionSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,

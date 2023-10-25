@@ -9,34 +9,10 @@ function getCookie(name) {
     return null;
 }
 
-async function checkSessionValidity(sessionToken) {
-    try {
-        const response = await fetch('http://localhost:3001/check-session', {
-            method: 'POST',
-            headers: headers,
-            credentials: 'include',
-            body: JSON.stringify({ sessionToken }),
-        });
-
-        if (response.status === 200) {
-            // Session is valid; you can consider the user as logged in
-            const data = await response.json();
-            alert(data.message);
-            // Redirect to the dashboard or other authorized pages
-        } else {
-            // Session is not valid; you can proceed with the login form
-        }
-    } catch (error) {
-        console.error(error);
-    }
-}
-
 async function checkSessionOnLoad() {
-    // Get the session token from the cookie
     const sessionToken = getCookie('sessionToken');
 
     if (sessionToken) {
-        // Check the validity of the session token
         try {
             const response = await fetch('http://localhost:3001/check-session', {
                 method: 'POST',

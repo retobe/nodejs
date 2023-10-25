@@ -66,7 +66,7 @@ async function updatePageTing() {
     }
 }
 
-setInterval(updatePageTing, 1000);
+setTimeout(updatePageTing, 1000);
 
 async function updateBalance(amount = 0) {
     if (isNaN(amount)) return console.log("Invalid Amount")

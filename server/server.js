@@ -3,16 +3,16 @@ const express = require("express");
 const cookieParser = require('cookie-parser');
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const cors = require('cors'); // Import the cors middleware
+const cors = require('cors');
 const app = express();
 require("dotenv").config();
-const Schema = require("./User"); // Make sure this path is correct
+const Schema = require("./User");
 const uuid = require('uuid');
 
 function generateUniqueSessionToken() {
-    return uuid.v4(); // Generate a random UUID
+    return uuid.v4();
 }
-const uri = process.env.TOKEN; // Change to your MongoDB URI
+const uri = process.env.TOKEN;
 
 // Use body-parser middleware to parse incoming request bodies
 const corsOptions = {
@@ -20,13 +20,13 @@ const corsOptions = {
     credentials: true,
 };
 
+app.use(cors(corsOptions));
 app.use(function (err, req, res, next) {
     console.error(err.stack);
     res.status(500).send('Something broke!');
 });
-app.use(cors(corsOptions));
-app.use(bodyParser.json()); // Parse JSON data
-app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded form data
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 
@@ -44,23 +44,21 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 app.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
 
-    // Check if the user has a session token cookie
     const sessionToken = req.cookies['sessionToken'];
 
     if (sessionToken) {
-        // Check the validity of the session token
         try {
             const user = await Schema.User.findOne({ sessionToken });
             if (user && user.sessionExpiration > new Date()) {
-                // Session is valid; update the session expiration (e.g., refresh it to 7 days from now)
+
                 const newExpiration = new Date();
                 newExpiration.setDate(newExpiration.getDate() + 7);
 
-                // Update the session expiration in the database
+
                 user.sessionExpiration = newExpiration;
                 await user.save();
 
-                // You can consider the user as logged in, so respond with success
+
                 return res.status(200).json({ message: 'Session is valid. User is logged in.', session: true });
             }
         } catch (error) {
@@ -68,10 +66,8 @@ app.post('/register', async (req, res) => {
         }
     }
 
-    // If the session token is not valid or doesn't exist, proceed with regular registration
     try {
         console.log("Reached here")
-        // Check if the email already exists in the database
         const existingUser = await Schema.User.exists({ email: email });
 
         if (!!existingUser === true) {
@@ -79,11 +75,8 @@ app.post('/register', async (req, res) => {
             return res.status(401).json({ error: 'Email already inuse' });
         }
 
-        // Create a new user
         const user = await Schema.User.create({ name: username, email: email, password: password });
 
-
-        // Set a new session token for the newly registered user (similar to the login route)
 
         const sessionToken = generateUniqueSessionToken();
         const expirationTimestamp = new Date();
@@ -175,14 +168,11 @@ app.post('/check-session', async (req, res) => {
     const { sessionToken } = req.body;
 
     try {
-        // Find the user associated with the session token
         const user = await Schema.User.findOne({ sessionToken });
 
         if (user && user.sessionExpiration > new Date()) {
-            // Session is valid
             return res.status(200).json({ session: true });
         } else {
-            // Session is not valid
             return res.status(401).json({ session: false });
         }
     } catch (error) {
@@ -216,7 +206,6 @@ app.post("/cookie-add", async (req, res) => {
 })
 
 
-// Start the server
 const port = process.env.PORT;
 
 app.listen(port, () => {
