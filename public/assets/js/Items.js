@@ -15,7 +15,15 @@ document.addEventListener("DOMContentLoaded", function () {
             item.classList.add("selected");
             item.disabled = true
 
-            multiplierAdd(parseInt(event.target.textContent));
+            const multiplier = parseInt(event.target.textContent);
+            const multiplierArray = [1, 2, 5, 10, 15, 20, 50]
+
+            if (!multiplierArray.includes(multiplier)) {
+                alert("Stop playing with the elements.")
+                return window.location.reload()
+            }
+
+            multiplierAdd(multiplier);
         });
     });
 
